@@ -7,7 +7,7 @@ var life = 7;
 
 function preload(){
   //pre-load images
-  jake_running=loadAnimation("Jake1.png","jake2.png","jake3.png","jake4.png","jake5.png");
+  jake_running=loadAnimation("Jake1.png","jake3.png","jake5.png");
   pathImage=loadImage("path.png");
   coinImg=loadImage("coin.png");
   bombImg=loadImage("bomb.png");
