@@ -1,237 +1,253 @@
-var jake,jake_running,edges;
-var path,invisibleGround,invisibleGround1,pathImage;
-var coinImg,coin,coinImg1,coin1,coinImg2,coin2,bombImg,bomb,bomb1,bomb2,energyImg,energyDrink,energyDrink1,energyDrink2;
-var score=0;
-var money = 0;
-var life = 7;
+var jake, jake_running, coin, coinImg, coin1, counImg1, coin2, coinImg2, bomb, bomb1, bomb2, bombImg, energy, energy1, energy2, energyImg, ground, groundImage, invisibleGround, invisibleGround2, soundBG, power, soundBG2, soundC, powerImg, soundED, soundB;
+var gameState = "sound";
+var score = 0;
+var lifes = 5;
 
-function preload(){
+function preload() {
   //pre-load images
-  jake_running=loadAnimation("Jake1.png","jake3.png","jake5.png");
-  pathImage=loadImage("path.png");
-  coinImg=loadImage("coin.png");
-  bombImg=loadImage("bomb.png");
-  energyImg=loadImage("energyDrink.png");
+  jake_running = loadAnimation("Jake1.png", "Jake2.png", "jake3.png", "jake4.PNG", "jake5.png");
+  groundImage = loadImage("path.png");
+  coinImg = loadImage("coin.png");
+  bombImg = loadImage("bomb.png")
+  soundBG = loadSound("rS.wav");
+  soundBG2 = loadSound("background.wav");
+  soundC = loadSound("coin.mp3");
+  energyImg = loadImage("energyDrink.png");
+  powerImg = loadImage("power.png");
+  soundED = loadSound("energyD.wav");
+  soundB = loadSound("bomb.mp3");
 }
 
 function setup(){
-  createCanvas(400,500);
+  createCanvas(400,400);
   //create sprites here
-  path=createSprite(200,180,400,20);
-  path.addImage("path",pathImage);
-  path.velocityY=4;
-  path.scale=1.3;
-
-  invisibleGround=createSprite(20,300,20,390);
-  invisibleGround.visible=false;
-
-  invisibleGround1=createSprite(385,300,20,390);
-  invisibleGround1.visible=false
-   
-  //creating coin
-  coin=createSprite(200,200);
-  coin.addAnimation("coin",coinImg);
-  coin.scale=0.4;
-  coin.velocityY=8;
+  ground = createSprite(200, -100);
+  ground.addAnimation("path", groundImage);
+  ground.scale = 0.9;
+  ground.velocityY = 8;
+  ground.tint = 'yellow';
   
-  //creating coin1
-  coin1=createSprite(80,200);
-  coin1.addAnimation("coin",coinImg);
-  coin1.scale=0.4;
-  coin1.velocityY=8;
-
-  //creating coin2
-  coin2=createSprite(330,200);
-  coin2.addAnimation("coin",coinImg);
-  coin2.scale=0.4;
-  coin2.velocityY=8;
-
-  //creating bomb
-  bomb=createSprite(210,100);
-  bomb.addAnimation("bomb",bombImg);
-  bomb.scale=0.1;
-  bomb.velocityY=8;
-
-  //creating bomb1
-  bomb1=createSprite(85,100);
-  bomb1.addAnimation("bomb",bombImg);
-  bomb1.scale=0.1;
-  bomb1.velocityY=8;
+  coin = createSprite(200, 10);
+  coin.addAnimation("coin", coinImg);
+  coin.scale = 0.3;
+  coin.velocityY = 8;
   
-  //creating bomb2
-  bomb2=createSprite(335,100);
-  bomb2.addAnimation("bomb",bombImg);
-  bomb2.scale=0.1;
-  bomb2.velocityY=8;
+  coin1 = createSprite(120, 10);
+  coin1.addAnimation("coin", coinImg);
+  coin1.scale = 0.3;
+  coin1.velocityY = 8;
   
-  //creating energyDrink
-  energyDrink=createSprite(200,300);
-  energyDrink.addAnimation("energyDrink",energyImg);
-  energyDrink.scale=0.1;
-  energyDrink.velocityY=8;
+  coin2 = createSprite(280, 10);
+  coin2.addAnimation("coin", coinImg);
+  coin2.scale = 0.3;
+  coin2.velocityY = 8;
+  
+  jake = createSprite(200,300);
+  jake.addAnimation("running", jake_running);
+  jake.scale = 0.6;
+  
+  bomb = createSprite(200, -100);
+  bomb.addAnimation("bomb", bombImg);
+  bomb.scale = 0.05;
+  bomb.velocityY = 8;
+  bomb.tint = rgb(255, 0, 0);
+  
+  bomb1 = createSprite(120, -300);
+  bomb1.addAnimation("bomb", bombImg);
+  bomb1.scale = 0.05;
+  bomb1.velocityY = 8;
+  bomb1.tint = rgb(255, 0, 0);
 
-  //creating energyDrink1
-  energyDrink1=createSprite(80,300);
-  energyDrink1.addAnimation("energyDrink",energyImg);
-  energyDrink1.scale=0.1;
-  energyDrink1.velocityY=8;
+  bomb2 = createSprite(280, -400);
+  bomb2.addAnimation("bomb", bombImg);
+  bomb2.scale = 0.05;
+  bomb2.velocityY = 8;
+  bomb2.tint = rgb(255, 0, 0);
 
-  //creating energyDrink2
-  energyDrink2=createSprite(330,300);
-  energyDrink2.addAnimation("energyDrink",energyImg);
-  energyDrink2.scale=0.1;
-  energyDrink2.velocityY=8;
-
-  //creating jake
-  jake=createSprite(200,700,30,60);
-  jake.addAnimation("running",jake_running);
-  edges = createEdgeSprites();
-
-  //adding scale and position to jake
-  jake.scale=0.8;
-  jake.y=420;
+  invisibleGround = createSprite(370, 200, 100, 400);
+  invisibleGround.visible = true;
+  
+  invisibleGround2 = createSprite(40, 200, 100, 400);
+  invisibleGround2.visible = true;
+  
+  energy = createSprite(200, -2000);
+  energy.addAnimation("energy", energyImg);
+  energy.scale = 0.05;
+  energy.velocityY = 10;
+  
+  energy1 = createSprite(120, -600);
+  energy1.addAnimation("energy", energyImg);
+  energy1.scale = 0.05;
+  energy1.velocityY = 10;
+  
+  energy2 = createSprite(280, -1000);
+  energy2.addAnimation("energy", energyImg);
+  energy2.scale = 0.05;
+  energy2.velocityY = 10;
+  
+  // power = createSprite(25, 200);
+  // power.addAnimation("power", powerImg);
+  // power.scale = 0.05;
+  
+  soundBG.setVolume(0.2);
+  soundBG2.setVolume(0.6);
 }
 
 function draw() {
-  background("blue");
-  //make ground move 
-  if(path.y>570){
-    path.y=height/2
-    //scoring
-    score=score+Math.round(World.height/80);
+  background("white");
+  if(ground.y >= 470) {
+    ground.y = 5;
   }
- jake.x=World.mouseX;
+  jake.x = mouseX;
   
- 
- if(coin.y >= 570) {
-  coin.y = random(-700,-6000);
-}
- 
-if(coin1.y >= 570) {
-  coin1.y = random(-500,-300);
-}
-
-if(coin2.y >= 570) {
-  coin2.y = random(-900,-1000);
-}
-
-if(bomb.y >= 570) {
-  bomb.y = random(-5000, -10);
-}
-
-if(bomb1.y >= 570) {
-  bomb1.y = random(-9000, -10);
-}
-
-if(bomb2.y >= 570) {
-  bomb2.y = random(-900, -1000);
-}
-
-if(energyDrink.y >= 570) {
-   energyDrink.y = random(-10000, -8000);
-}
-
-if(energyDrink1.y >= 570) {
-   energyDrink1.y = random(-10000, -7000);
-}
-
-if(energyDrink2.y >= 570) {
-   energyDrink2.y = random(-9000, -7000);
-}
-
-if(jake.isTouching(coin)) {
-  money+=1;
-  coin.y = random(-10000, -1000); 
-}
-
-if(jake.isTouching(coin1)) {
-  money+=1;
-  coin1.y = random(-6000, -4000); 
-}
-
-if(jake.isTouching(coin2)) {
-  money+=1;
-  coin2.y = random(-8000, -10); 
-}
-
-if(jake.isTouching(bomb)) {
-  life-=1;
-  bomb.y = random(-1000, -10);
-}
-
-if(jake.isTouching(bomb1)) {
-  life-=1;
-  bomb1.y = random(-100, -10);
-}
-
-if(jake.isTouching(bomb2)) {
-  life-=1;
-  bomb2.y = random(-80, -10);
-}
-
-if(jake.isTouching(energyDrink)) {
-  life+=1;
-  energyDrink.y = random(-1000, -8000);
-}
-
-if(jake.isTouching(energyDrink1)) {
-  life+=1;
-  energyDrink1.y = random(-2000, -800);
-}
-
-if(jake.isTouching(energyDrink2)) {
-  life+=1;
-  energyDrink2.y = random(-1000, -800);
-}
-
-jake.collide(invisibleGround);
-jake.collide(invisibleGround1);
-
-drawSprites();
- 
-textSize=10;
-fill ("lightblue")
-text(money,90,50);
-text("Money=",50,50);
-text(life,80,40);
-text("Life=",50,40);
-text(+score,90,30);
-text("score=",50,30)
-
-if(score>=500){
-  path.velocityY=0;
-  bomb.velocityY=0;
-  bomb1.velocityY=0;
-  bomb2.velocityY=0;
-  coin.velocityY=0;
-  coin1.velocityY=0;
-  coin2.velocityY=0;
-  energyDrink.velocityY=0;
-  energyDrink1.velocityY=0;
-  energyDrink2.velocityY=0;
-  jake.pause();
-  jake.x=400;
-  jake.y=400; 
-  textSize=300;
-  fill("yellow");
-  text("You Won! Refresh the page to restart!",150,200);
-}
-if(life<=0){
-  path.velocityY=0;
-  bomb.velocityY=0;
-  bomb1.velocityY=0;
-  bomb2.velocityY=0;
-  coin.velocityY=0;
-  coin1.velocityY=0;
-  coin2.velocityY=0;
-  energyDrink.velocityY=0;
-  energyDrink1.velocityY=0;
-  energyDrink2.velocityY=0;
-  jake.pause();
-  jake.x=400;
-  jake.y=400;
-  textSize=300;
-  fill("yellow");
-  text("Game Over! Refresh the page to restart!",100,200);
-}
+  if(coin.y >= 470) {
+    coin.y = random(-7000, -6000);
+  }
+  
+  if(coin1.y >= 470) {
+    coin1.y = random(-5000, -3000);
+  }
+  
+  if(coin2.y >= 470) {
+    coin2.y = random(-9000, -6000);
+  }
+  
+  if(bomb.y >= 470) {
+    bomb.y = random(-1000, -10);
+  }
+  
+  if(bomb1.y >= 470) {
+    bomb1.y = random(-900, -10);
+  }
+  
+  if(bomb2.y >= 470) {
+    bomb2.y = random(-900, -100);
+  }
+  
+  if(energy.y >= 470) {
+    energy.y = random(-10000, -8000);
+  }
+  
+  if(energy1.y >= 470) {
+    energy1.y = random(-10000, -7000);
+  }
+  
+  if(energy2.y >= 470) {
+    energy2.y = random(-9000, -7000);
+  }
+  
+  
+  
+  if(jake.isTouching(coin)) {
+    score+=1;
+    coin.y = random(-10000, -1000);
+    soundC.play(); 
+  }
+  
+  if(jake.isTouching(coin1)) {
+    score+=1;
+    coin1.y = random(-6000, -4000);
+    soundC.play(); 
+  }
+  
+  if(jake.isTouching(coin2)) {
+    score+=1;
+    coin2.y = random(-8000, -10);
+    soundC.play(); 
+  }
+  
+  if(jake.isTouching(bomb)) {
+    lifes-=1;
+    bomb.y = random(-1000, -10);
+    soundB.play();
+  }
+  
+  if(jake.isTouching(bomb1)) {
+    lifes-=1;
+    bomb1.y = random(-100, -10);
+    soundB.play();
+  }
+  
+  if(jake.isTouching(bomb2)) {
+    lifes-=1;
+    bomb2.y = random(-80, -10);
+    soundB.play();
+  }
+  
+  if(jake.isTouching(energy)) {
+    lifes+=1;
+    energy.y = random(-10000, -8000);
+    soundED.play();
+  }
+  
+  if(jake.isTouching(energy1)) {
+    lifes+=1;
+    energy1.y = random(-9000, -7000);
+    soundED.play();
+  }
+  
+  if(jake.isTouching(energy2)) {
+    lifes+=1;
+    energy2.y = random(-10000, -9000);
+    soundED.play();
+  }
+  
+  jake.collide(invisibleGround);
+  jake.collide(invisibleGround2);
+  
+  drawSprites();
+  
+  textSize = 10;
+  fill("white");
+  text(score, 130, 20);
+  text("Score:", 90, 20)
+  text(lifes, 299, 20);
+  text("Lifes: ", 265, 20);
+  
+  if(score >= 8) {
+    ground.velocityY = 0;
+    coin.velocityY = 0;
+    coin1.velocityY = 0;
+    coin2.velocityY = 0;
+    bomb.velocityY = 0;
+    bomb1.velocityY = 0;
+    bomb2.velocityY = 0;
+    energy.velocityY = 0;
+    energy1.velocityY = 0;
+    energy2.velocityY = 0;
+    jake.pause();
+    jake.x = -100;
+    jake.y = -100;
+    textSize = 100;
+    fill("white");
+    text("You Won! Refresh the page to restart!", 100, 200);
+    soundBG.stop();
+    soundBG2.stop();
+  }
+  
+  if(lifes <= 0) {
+    ground.velocityY = 0;
+    coin.velocityY = 0;
+    coin1.velocityY = 0;
+    coin2.velocityY = 0;
+    bomb.velocityY = 0;
+    bomb1.velocityY = 0;
+    bomb2.velocityY = 0;
+    energy.velocityY = 0;
+    energy1.velocityY = 0;
+    energy2.velocityY = 0;
+    jake.pause();
+    jake.x = -100;
+    jake.y = -100;
+    textSize = 100;
+    fill("white");
+    text("Game Over! Refresh the page to restart!", 100, 200);
+    soundBG.stop();
+    soundBG2.stop();
+  }
+  if(gameState === "sound") {
+    soundBG.loop();
+    soundBG2.loop();
+    gameState = 'mute';
+  }
 }
